@@ -26,7 +26,11 @@ cart.forEach((cartItem) => {
                 <div class="cart-item-details">
                     <div class="product-name">${matchingProduct.name}</div>
                     <div class="product-price">${formatCurrency(matchingProduct.priceCents)}</div>
-                    <div class="product-quantity">
+
+                    <!-- =============================================== -->
+                    <!-- A CORREÇÃO ESTÁ NESTE BLOCO DE CÓDIGO ABAIXO -->
+                    <!-- =============================================== -->
+                    <div class="product-quantity js-product-quantity-${matchingProduct.id}">
                         <span>
                             Quantity: <span class="quantity-label">${cartItem.quantity}</span>
                         </span>
@@ -34,11 +38,17 @@ cart.forEach((cartItem) => {
                             data-product-id="${matchingProduct.id}">
                             Update
                         </span>
+                        <input class="quantity-input">
+                        <span class="save-quantity-link link-primary js-save-link"
+                        data-product-id="${matchingProduct.id}">
+                            Save
+                        </span>
                         <span class="delete-quantity-link link-primary js-delete-link" 
                             data-product-id="${matchingProduct.id}">
                             Delete
                         </span>
                     </div>
+
                 </div>
 
                 <div class="delivery-options">
@@ -66,7 +76,10 @@ document.querySelectorAll('.js-update-link')
     .forEach((link) => {
         link.addEventListener('click', () => {
             const productId = link.dataset.productId;
-            console.log(productId);
+            const container = document.querySelector(
+                `.js-product-quantity-${productId}`
+            );
+            container.classList.add('is-editing-quantity');
         });
     });
 
@@ -74,3 +87,15 @@ const cartQuantity = calculatecartQuantity();
 
 document.querySelector('.js-checkout-quantity')
     .innerHTML = `${cartQuantity} items`;
+
+document.querySelectorAll('.js-save-link')
+    .forEach((link) => {
+        link.addEventListener('click', () => {
+            const productId = link.dataset.productId;
+
+            const container = document.querySelector(
+                `.js-product-quantity-${productId}`
+            );
+        container.classList.remove('is-editing-quantity');
+        });
+    });
