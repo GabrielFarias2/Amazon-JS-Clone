@@ -1,4 +1,4 @@
-import { cart, removefromCart, calculatecartQuantity, updateQuantity } from "../data/cart.js";
+import { cart, removefromCart, calculatecartQuantity, updateQuantity, updatedeliveryOption } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatCurrency } from "./ultility/money.js";
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
@@ -40,22 +40,12 @@ cart.forEach((cartItem) => {
   });
 
   // Encontre a opção de entrega selecionada para este item
-  const selectedDeliveryOption = deliveryOptions.find(option => option.id === cartItem.deliveryOptionsid);
+  const selectedDeliveryOption = deliveryOptions.find(option => option.id === cartItem.deliveryOptionId);
 
   // Calcule a data de entrega principal
   const today = dayjs();
   const deliveryDate = today.add(selectedDeliveryOption.deliveryDays, 'days');
   const deliveryDateString = deliveryDate.format('dddd, MMMM D');
-
-  const deliveryOptionsid = cartItem.deliveryOptionsid;
-
-  let deliveryOption;
-
-  deliveryOptions.forEach((option) => {
-    if (option.id === deliveryOption) {
-        deliveryOption = option
-    }
-  });
 
   cartSummaryHTML += `
     <div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
@@ -110,10 +100,12 @@ function deliveryOptionsHTML(matchingProduct, cartItem) {
       : `$${formatCurrency(deliveryOption.priceCents)} -`;
 
     // Marcar como checked se for a opção selecionada no carrinho
-    const checked = deliveryOption.id === cartItem.deliveryOptionsid ? 'checked' : '';
+    const checked = deliveryOption.id === cartItem.deliveryOptionId ? 'checked' : '';
 
     html += `
-      <div class="delivery-option">
+      <div class="delivery-option js-delivery-option"
+      data-product-id="${matchingProduct.id}"
+      data-delivery-option-id="${deliveryOption.id}">
         <input type="radio"
           class="delivery-option-input"
           name="delivery-option-${matchingProduct.id}"
@@ -180,3 +172,11 @@ document.querySelectorAll('.quantity-input')
       }
     });
   });
+
+document.querySelectorAll('.js-delivery-option')
+  .forEach((element) => {
+    element.addEventListener('click', () => {
+      const {productId, deliveryOptionId} = element.dataset;
+      updatedeliveryOption(productId, deliveryOptionId);
+    })
+  })
