@@ -1,8 +1,8 @@
 import { cart, removefromCart, calculatecartQuantity, updateQuantity, updatedeliveryOption } from "../../data/cart.js";
-import { products } from "../../data/products.js";
+import { products, getProduct } from "../../data/products.js";
 import { formatCurrency } from "../ultility/money.js";
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
-import { deliveryOptions } from "../../data/deliveryOptions.js";
+import { deliveryOptions, getDeliveryOption } from "../../data/deliveryOptions.js";
 
 
 
@@ -35,21 +35,19 @@ export function renderOrderSummary() {
 
   cart.forEach((cartItem) => {
     const productId = cartItem.productId;
-    let matchingProduct;
+    const matchingProduct = getProduct(productId);
 
-    products.forEach((product) => {
-      if (product.id === productId) {
-        matchingProduct = product;
-      }
-    });
+    const selectedDeliveryOption = getDeliveryOption(cartItem.deliveryOptionId);
 
-    // Encontre a opção de entrega selecionada para este item
-    const selectedDeliveryOption = deliveryOptions.find(option => option.id === cartItem.deliveryOptionId);
-
-    // Calcule a data de entrega principal
-    const today = dayjs();
-    const deliveryDate = today.add(selectedDeliveryOption.deliveryDays, 'days');
-    const deliveryDateString = deliveryDate.format('dddd, MMMM D');
+    let deliveryDateString = '';
+    if (selectedDeliveryOption) {
+      const today = dayjs();
+      const deliveryDate = today.add(selectedDeliveryOption.deliveryDays, 'days');
+      deliveryDateString = deliveryDate.format('dddd, MMMM D');
+    } else {
+      deliveryDateString = 'No delivery option selected';
+      console.warn('Delivery option not found for cart item:', cartItem);
+}
 
     cartSummaryHTML += `
       <div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
