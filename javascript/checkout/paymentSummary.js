@@ -5,6 +5,7 @@ import {formatCurrency} from "../ultility/money.js";
 
 
 
+
 export function renderPaymentSummary() {
   let productPriceCents = 0;
   let ShippingPriceCents = 0;
