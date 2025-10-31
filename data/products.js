@@ -101,7 +101,9 @@ const tshirt = new Clothing({
 
 
 export function loadProductsFetch() {
-   const promise = fetch('https://supersimplebackend.dev/products').then((response) => {
+   const promise = fetch(
+    'https://supersimplebackend.dev/products'
+  ).then((response) => {
     return response.json();
   }).then((productsData) => {
       products = productsData.map((productDetails) => {
@@ -142,7 +144,7 @@ xhr.addEventListener('load', () => {
 
   return new Product(productDetails);
   });
-  console.log('Load Products!')
+  console.log('Load Products')
   fun();
 });
 
