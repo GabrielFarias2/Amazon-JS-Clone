@@ -6,22 +6,22 @@ import { loadCart } from "../data/cart.js";
 async function loadPage() {
   try {
     // throw 'Error 1'
-     await loadProductsFetch();
+    await loadProductsFetch();
 
-   const value = await new Promise((resolve, reject) => {
-    // throw 'Error 2'
+    const value = await new Promise((resolve, reject) => {
+      // throw 'Error 2'
       loadCart(() => {
-    // reject('Error 3')
-      resolve('value 2');
-});
-});
+        // reject('Error 3')
+        resolve("value 2");
+      });
+    });
   } catch (error) {
-    console.log('unexpected error. Please try again')
-  };
+    console.log("unexpected error. Please try again");
+  }
 
   renderOrderSummary();
   renderPaymentSummary();
-};
+}
 
 loadPage();
 /*
@@ -45,4 +45,4 @@ loadProducts(() => {
   renderOrderSummary();
   renderPaymentSummary();
 });
-*/  
+*/

@@ -5,10 +5,8 @@ import { formatCurrency } from "./ultility/money.js";
 loadProducts(RenderProductsGrid);
 
 function RenderProductsGrid() {
+  let productsHTML = "";
 
-
-  let productsHTML = '';
-    
   products.forEach((product) => {
     productsHTML += `      
             <div class="product-container">
@@ -63,26 +61,21 @@ function RenderProductsGrid() {
                   data-product-id="${product.id}" >
                   Add to Cart
                 </button>
-              </div>`
+              </div>`;
   });
 
-  document.querySelector('.js-products-grid')
-    .innerHTML = productsHTML
+  document.querySelector(".js-products-grid").innerHTML = productsHTML;
 
-  document.querySelectorAll('.js-add-to-cart')
-    .forEach((button) => {
-      button.addEventListener('click', () => {
-        const productId = button.dataset.productId;
-        addToCart(productId);
-        
-        const carttQuantity = calculatecartQuantity();
-        document.querySelector('.js-cart-quantity')
-          .innerHTML = carttQuantity;
-      });
-    })
+  document.querySelectorAll(".js-add-to-cart").forEach((button) => {
+    button.addEventListener("click", () => {
+      const productId = button.dataset.productId;
+      addToCart(productId);
 
+      const carttQuantity = calculatecartQuantity();
+      document.querySelector(".js-cart-quantity").innerHTML = carttQuantity;
+    });
+  });
 
-    const initialQuantity = calculatecartQuantity();
-    document.querySelector('.js-cart-quantity')
-      .innerHTML = initialQuantity;
+  const initialQuantity = calculatecartQuantity();
+  document.querySelector(".js-cart-quantity").innerHTML = initialQuantity;
 }
