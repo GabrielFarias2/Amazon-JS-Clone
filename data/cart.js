@@ -1,9 +1,14 @@
 export let cart;
 
-loadfromStorage();
 
-export function loadfromStorage() {
-  cart = JSON.parse(localStorage.getItem("cart"));
+function loadfromStorage() {
+  try {
+    cart = JSON.parse(localStorage.getItem("cart"));
+  } catch (error) {
+    console.warn('Dado do localStorage corrompido. Resetando o carrinho.', error);
+    
+    cart = null; 
+  }
 
   if (!cart) {
     cart = [
@@ -19,7 +24,7 @@ export function loadfromStorage() {
       },
     ];
   }
-}
+};
 
 function savetoStorage() {
   localStorage.setItem("cart", JSON.stringify(cart));
@@ -95,14 +100,16 @@ export function updatedeliveryOption(productId, deliveryOptionId) {
   savetoStorage();
 }
 
-export function loadCart(fun) {
-  const xhr = new XMLHttpRequest();
+export async function loadCartFetch() {
+  try {
+    const response = await fetch('https://supersimplebackend.dev/cart');
 
-  xhr.addEventListener("load", () => {
-    console.log(xhr.response);
-    fun();
-  });
-
-  xhr.open("GET", "https://supersimplebackend.dev/cart");
-  xhr.send();
+    if (!response.ok) {
+      throw new Error(`Erro HTTP! Status: ${response.status}`);
+    }
+    cart = await response.json();
+  } catch (error) {
+    console.error('Falha ao buscar carrinho do backend. Carregando do localStorage.', error);
+    loadfromStorage();
+  }
 }

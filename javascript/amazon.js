@@ -1,8 +1,27 @@
-import { cart, addToCart, calculatecartQuantity } from "../data/cart.js";
-import { products, loadProducts } from "../data/products.js";
+import { cart, addToCart, calculatecartQuantity, loadCartFetch } from "../data/cart.js";
+import { products, loadProductsFetch } from "../data/products.js";
 import { formatCurrency } from "./ultility/money.js";
 
-loadProducts(RenderProductsGrid);
+loadAmazonPage();
+
+
+async function  loadAmazonPage() {
+
+console.log('carregando pagina Amazon....')
+  
+
+  //    antes de tentar renderizar qualquer coisa.
+  await Promise.all([
+    loadProductsFetch(),
+    loadCartFetch()
+  ]);
+
+  console.log('Dados carregados. Renderizando produtos...');
+  // 5. Só chame a função de renderizar DEPOIS que tudo carregou
+  RenderProductsGrid();
+}
+
+
 
 function RenderProductsGrid() {
   let productsHTML = "";
