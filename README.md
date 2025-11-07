@@ -17,4 +17,7 @@ Um clone da interface da Amazon construído com JavaScript puro (Vanilla JS). O 
 - LocalStorage
 - REST API Integration
 
+## Demo do Projeto
+https://gabrielfarias2.github.io/Amazon-JS-Clone/amazon.html
+
 > Projeto desenvolvido para demonstrar habilidades em JavaScript moderno e boas práticas de desenvolvimento front-end.
